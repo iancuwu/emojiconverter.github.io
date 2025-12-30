@@ -124,7 +124,6 @@
       <label for="platform">choose platform:</label>
       <select id="platform">
         <option value="google">stock google emojis</option>
-        <option value="whatsapp">whatsapp dog</option>
       </select>
     </div>
     <div class="container">
@@ -160,7 +159,7 @@ function renderEmoji() {
         img.src = `https://twemoji.maxcdn.com/v/latest/72x72/${code}.png`;
       } else if(platform === 'whatsapp') {
         const fileName = getEmojiFileName(char);
-        img.src = `emojis/whatsapp/${fileName}`;
+        img.src = `./${fileName}`;
 
       }
       preview.appendChild(img);
