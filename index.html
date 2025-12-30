@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>emoji converter</title>
+<style>
+  :root {
+    --bg-light: #8dad1b;
+    --bg-dark: #1e1e1e;
+    --text-light: #222;
+    --text-dark: #000000;
+    --card-light: #eafab3;
+    --card-dark: #2c2c2c;
+    --primary: #b4dd1e;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Comic Sans MS', sans-serif;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  body.light {
+    background: var(--bg-light);
+    color: var(--text-light);
+  }
+
+
+  header {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--primary);
+    color: #000000;
+  }
+
+  footer {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--primary);
+    color: #000000;
+  }
+
+
+  main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 1rem;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    background: var(--card-light);
+    color: inherit;
+    transition: background 0.3s;
+  }
+
+
+
+  select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: var(--card-light);
+    color: inherit;
+  }
+
+
+  .preview {
+    padding: 1rem;
+    min-height: 150px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background: var(--card-light);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+
+  .emoji-img {
+    width: 36px;
+    height: 36px;
+  }
+
+  @media (max-width: 768px) {
+    main {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body class="light">
+  <header>
+    <h1>poor people emoji converter</h1>
+    <h2>ever wondered what your green bubbler sees??</h2>
+  </header>
+  <main>
+    <div class="container">
+      <label for="emoji-input">type here:</label>
+      <textarea id="emoji-input" placeholder="use your rich people iphone emojis xoxo"></textarea>
+      <label for="platform">choose platform:</label>
+      <select id="platform">
+        <option value="google">stock google emojis</option>
+        <option value="whatsapp">whatsapp dog</option>
+      </select>
+    </div>
+    <div class="container">
+      <label>this is what they see...</label>
+      <div id="preview" class="preview"></div>
+    </div>
+  </main>
+
+<script>
+
+
+const input = document.getElementById('emoji-input');
+const preview = document.getElementById('preview');
+const platformSelect = document.getElementById('platform');
+
+// Functie simpla pentru a transforma emoji in Twemoji images
+function getEmojiFileName(char) {
+  const codePoints = [...char].map(c => c.codePointAt(0).toString(16));
+  return `emoji_u${codePoints.join('_')}.png`;
+}
+
+function renderEmoji() {
+  const platform = platformSelect.value;
+  const text = input.value;
+  preview.innerHTML = '';
+  for (const char of text) {
+    if (/\p{Emoji}/u.test(char)) {
+      const img = document.createElement('img');
+      img.className = 'emoji-img';
+      let code = char.codePointAt(0).toString(16);
+      // Exemplu simplificat: Google/Android Twemoji
+      if(platform === 'google') {
+        img.src = `https://twemoji.maxcdn.com/v/latest/72x72/${code}.png`;
+      } else if(platform === 'whatsapp') {
+        const fileName = getEmojiFileName(char);
+        img.src = `emojis/whatsapp/${fileName}`;
+
+      }
+      preview.appendChild(img);
+    } else {
+      preview.appendChild(document.createTextNode(char));
+    }
+  }
+}
+
+input.addEventListener('input', renderEmoji);
+platformSelect.addEventListener('change', renderEmoji);
+</script>
+<footer>
+  <p>&copy; 2025 iony's crazy midnight inventions. all rights reserved?</p>
+</footer>
+
+</body>
+</html>
